@@ -1,8 +1,4 @@
-import os
-import sys
-
 from flask import jsonify
-import webob
 
 from common import exceptions
 import models
@@ -10,11 +6,11 @@ from models import db
 
 
 def resource_create(uuid, resource_type, provider, endpoint,
-		    username, password, token, availability_zone, region):
+                    username, password, token, availability_zone, region):
 
     new_res = models.Resource(uuid, resource_type, provider, endpoint,
-			      username, password, token, availability_zone,
-			      region)
+                              username, password, token, availability_zone,
+                              region)
 
     db.session.add(new_res)
     db.session.commit()
@@ -45,7 +41,7 @@ def resource_detail(id):
               )
     if result is None:
         raise exceptions.ResourceNotFound(uid=id)
-        
+
     # Serialize the data for the response
     res_schema = models.ResourceSchema()
     data = res_schema.dump(result).data
@@ -78,10 +74,10 @@ def get_all_mldata():
 
 def mldata_detail(id):
     result = models.MLData.query.get(id)
-    
+
     if result is None:
         raise exceptions.MLDataNotFound(uid=id)
-        
+
     # Serialize the data for the response
     mldata_schema = models.MLDataSchema()
     data = mldata_schema.dump(result).data
@@ -107,7 +103,7 @@ def get_all_nodes():
 
 def node_detail(id):
     result = models.Node.query.get(id)
-    
+
     if result is None:
         raise exceptions.NodeNotFound(uid=id)
 
