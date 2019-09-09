@@ -1,4 +1,3 @@
-from flask import Flask
 from flask_marshmallow import Marshmallow
 from flask_sqlalchemy import SQLAlchemy
 from marshmallow import fields
@@ -31,9 +30,9 @@ class Resource(db.Model):
     __tablename__ = 'resource'
     uuid = db.Column(db.String(36), primary_key=True)
     resource_type = db.Column(db.String(255))
-    provider =  db.Column(db.String(255))
-    endpoint =  db.Column(db.String(255))
-    username =  db.Column(db.String(30))
+    provider = db.Column(db.String(255))
+    endpoint = db.Column(db.String(255))
+    username = db.Column(db.String(30))
     password = db.Column(db.String(30))
     token = db.Column(db.String(255))
     availability_zone = db.Column(db.String(255))
@@ -46,17 +45,17 @@ class Resource(db.Model):
     )
 
     def __init__(self, uuid=None, resource_type=None, provider=None,
-		 endpoint=None, username=None, password=None, token=None,
-		 availability_zone=None, region=None):
+                 endpoint=None, username=None, password=None, token=None,
+                 availability_zone=None, region=None):
         self.uuid = uuid
-	self.resource_type = resource_type
+        self.resource_type = resource_type
         self.provider = provider
         self.endpoint = endpoint
-	self.username = username
-	self.password = password
+        self.username = username
+        self.password = password
         self.token = token
-	self.availability_zone = availability_zone
-	self.region = region
+        self.availability_zone = availability_zone
+        self.region = region
 
 
 class Node(db.Model):
@@ -64,7 +63,7 @@ class Node(db.Model):
     uuid = db.Column(db.String(36), primary_key=True)
     resource_id = db.Column(db.String(36), db.ForeignKey('resource.uuid'))
     node_ip = db.Column(db.String(255))
-    username =  db.Column(db.String(30))
+    username = db.Column(db.String(30))
     password = db.Column(db.String(10))
 
     def __init__(self, uuid=None, resource_id=None, node_ip=None,
