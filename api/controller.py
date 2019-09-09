@@ -1,8 +1,5 @@
 import json
 
-import flask
-from flask import Blueprint
-from flask import Flask
 from flask import jsonify
 from flask import make_response
 from flask import request
@@ -11,14 +8,14 @@ from webob import exc
 
 from common import exceptions
 from db import api
-from db.models import db
 from json_parser import JsonParser
 from migrate import app as application
 
 
 class Controller():
+    """Controller for MLData, resources and node."""
 
-    @application.route('/data', methods = ['POST'])
+    @application.route('/data', methods=['POST'])
     def post():
         content = request.get_json()
         with open('temp.json', 'w') as f:
@@ -26,8 +23,8 @@ class Controller():
         json_obj = JsonParser("temp.json")
 
         json_obj.validate_json_data_type(content)
-        json_data = json_obj.parse_json_data()
-        
+        json_obj.parse_json_data()
+
         ml_uuid = uuidutils.generate_uuid()
         url = content['DataURL']
         ml_lib = content['variables']['mlLib']
@@ -41,7 +38,7 @@ class Controller():
         resources = content['resource']
         for res in resources:
             res_uuid = uuidutils.generate_uuid()
-	    resource_type = res.get('InfrastrctureType')
+            resource_type = res.get('InfrastrctureType')
             provider = res.get('provider')
             if res.get('APIEndpoint'):
                 endpoint = res.get('APIEndpoint')
@@ -50,12 +47,12 @@ class Controller():
             username = res.get('username')
             password = res.get('password')
             token = res.get('token')
-	    availability_zone = res.get('availabilityZone')
-	    region = res.get('Region')
+            availability_zone = res.get('availabilityZone')
+            region = res.get('Region')
 
             api.resource_create(res_uuid, resource_type, provider, endpoint,
                                 username, password, token, availability_zone,
-				region)
+                                region)
 
             if res['NodeList']:
                 for node in res['NodeList']:
@@ -67,7 +64,7 @@ class Controller():
                     api.node_create(uuid, resource_id, node_ip,
                                     username, password)
 
-        return json.dumps(201, {'ContentType':'application/json'})
+        return json.dumps(201, {'ContentType': 'application/json'})
 
     @application.route("/resource/<id>", methods=["GET"])
     def get_resource(id):
@@ -90,7 +87,7 @@ class Controller():
         except exceptions.ResourceNotFound:
             msg = "Can not find requested resource: %s" % id
             return exc.HTTPNotFound(explanation=msg)
- 
+
     @application.route("/mldata/<id>", methods=["GET"])
     def get_mldata(id):
         try:
