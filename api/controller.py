@@ -77,7 +77,7 @@ class Controller():
 
     @application.route("/resource", methods=["GET"])
     def get_all_resources():
-        return api.get_all_resources()
+        return jsonify(api.get_all_resources())
 
     @application.route("/resource/<id>", methods=["DELETE"])
     def resource_delete(id):
@@ -92,14 +92,14 @@ class Controller():
     def get_mldata(id):
         try:
             result = api.mldata_detail(id)
-            return make_response(jsonify(result))
+            return make_response(jsonify(result), 200)
         except exceptions.MLDataNotFound:
             msg = "Can not find requested MLData: %s" % id
             return exc.HTTPNotFound(explanation=msg)
 
     @application.route("/mldata", methods=["GET"])
     def get_all_mldata():
-        return api.get_all_mldata()
+        return jsonify(api.get_all_mldata())
 
     @application.route("/mldata/<id>", methods=["DELETE"])
     def mldata_delete(id):
@@ -121,7 +121,7 @@ class Controller():
 
     @application.route("/node", methods=["GET"])
     def get_all_nodes():
-        return api.get_all_nodes()
+        return jsonify(api.get_all_nodes())
 
     @application.route("/node/<id>", methods=["DELETE"])
     def node_delete(id):

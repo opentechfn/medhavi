@@ -1,19 +1,19 @@
-from flask_marshmallow import Marshmallow
 from flask_sqlalchemy import SQLAlchemy
-from marshmallow import fields
 
-ma = Marshmallow()
+from db import model_base as mb
+
+
 db = SQLAlchemy()
 
 
-class MLData(db.Model):
+class MLData(db.Model, mb.ModelBase):
     __tablename__ = 'ml_data'
     uuid = db.Column(db.String(36), primary_key=True)
     url = db.Column(db.String(255))
     ml_lib = db.Column(db.String(255))
     is_form_cluster = db.Column(db.Boolean)
     storage_name = db.Column(db.String(255))
-    storage_type = db.column(db.String(255))
+    storage_type = db.Column(db.String(255))
 
     def __init__(self, uuid=None, url=None, ml_lib=None,
                  is_form_cluster=None, storage_name=None,
@@ -25,8 +25,12 @@ class MLData(db.Model):
         self.storage_name = storage_name
         self.storage_type = storage_type
 
+    def to_dict(self):
+        d = super(MLData, self).to_dict()
+        return d
 
-class Resource(db.Model):
+
+class Resource(db.Model, mb.ModelBase):
     __tablename__ = 'resource'
     uuid = db.Column(db.String(36), primary_key=True)
     resource_type = db.Column(db.String(255))
@@ -57,8 +61,13 @@ class Resource(db.Model):
         self.availability_zone = availability_zone
         self.region = region
 
+    def to_dict(self):
+        d = super(Resource, self).to_dict()
+        d['nodes'] = [r.to_dict() for r in self.nodes]
+        return d
 
-class Node(db.Model):
+
+class Node(db.Model, mb.ModelBase):
     __tablename__ = 'node'
     uuid = db.Column(db.String(36), primary_key=True)
     resource_id = db.Column(db.String(36), db.ForeignKey('resource.uuid'))
@@ -74,21 +83,6 @@ class Node(db.Model):
         self.username = username
         self.password = password
 
-
-class NodeSchema(ma.ModelSchema):
-    class Meta:
-        model = Node
-        sqla_session = db.session
-
-
-class MLDataSchema(ma.ModelSchema):
-    class Meta:
-        model = MLData
-        sqla_session = db.session
-
-
-class ResourceSchema(ma.ModelSchema):
-    class Meta:
-        model = Resource
-        sqla_session = db.session
-    nodes = fields.Nested('NodeSchema', default=[], many=True)
+    def to_dict(self):
+        d = super(Node, self).to_dict()
+        return d

@@ -1,8 +1,20 @@
-from flask import jsonify
-
 from common import exceptions
 import models
 from models import db
+
+
+def to_dict(func):
+    def decorator(*args, **kwargs):
+        res = func(*args, **kwargs)
+        if isinstance(res, list):
+            return [item.to_dict() for item in res]
+
+        if res:
+            return res.to_dict()
+        else:
+            return None
+
+    return decorator
 
 
 def resource_create(uuid, resource_type, provider, endpoint,
@@ -34,26 +46,23 @@ def node_create(uuid, resource_id, node_ip, username, password):
     db.session.commit()
 
 
+@to_dict
 def resource_detail(id):
     result = (models.Resource.query.filter(models.Resource.uuid == id)
               .outerjoin(models.Node)
               .one_or_none()
               )
+
     if result is None:
         raise exceptions.ResourceNotFound(uid=id)
 
-    # Serialize the data for the response
-    res_schema = models.ResourceSchema()
-    data = res_schema.dump(result).data
-    return data
+    return result
 
 
+@to_dict
 def get_all_resources():
     result = models.Resource.query.all()
-    # Serialize the data for the response
-    res_schema = models.ResourceSchema(many=True)
-    res = res_schema.dump(result)
-    return jsonify(res.data)
+    return result
 
 
 def resource_delete(id):
@@ -64,24 +73,20 @@ def resource_delete(id):
     db.session.commit()
 
 
+@to_dict
 def get_all_mldata():
     result = models.MLData.query.all()
-    # Serialize the data for the response
-    mldata_schema = models.MLDataSchema(many=True)
-    res = mldata_schema.dump(result)
-    return jsonify(res.data)
+    return result
 
 
+@to_dict
 def mldata_detail(id):
     result = models.MLData.query.get(id)
 
     if result is None:
         raise exceptions.MLDataNotFound(uid=id)
 
-    # Serialize the data for the response
-    mldata_schema = models.MLDataSchema()
-    data = mldata_schema.dump(result).data
-    return data
+    return result
 
 
 def mldata_delete(id):
@@ -93,24 +98,20 @@ def mldata_delete(id):
     db.session.commit()
 
 
+@to_dict
 def get_all_nodes():
     result = models.Node.query.all()
-    # Serialize the data for the response
-    node_schema = models.NodeSchema(many=True)
-    res = node_schema.dump(result)
-    return jsonify(res.data)
+    return result
 
 
+@to_dict
 def node_detail(id):
     result = models.Node.query.get(id)
 
     if result is None:
         raise exceptions.NodeNotFound(uid=id)
 
-    # Serialize the data for the response
-    node_schema = models.NodeSchema()
-    data = node_schema.dump(result).data
-    return data
+    return result
 
 
 def node_delete(id):
