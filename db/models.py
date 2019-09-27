@@ -45,7 +45,8 @@ class Resource(db.Model, mb.ModelBase):
         'Node',
         backref='resource',
         cascade='all, delete, delete-orphan',
-        single_parent=True
+        single_parent=True,
+        lazy='subquery'
     )
 
     def __init__(self, uuid=None, resource_type=None, provider=None,
