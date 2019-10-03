@@ -1,0 +1,28 @@
+- hosts: all
+  become: yes
+  become_user: centos
+  tasks:
+
+   - name: Copy container deployment file to Worker Node
+     copy:
+       src: ./containers/
+       dest: /home/centos 
+        
+   - name: change user permission of Yaml files
+     file: path=/home/centos/ owner=centos group=wheel mode=0775 state=directory recurse=yes
+
+- hosts: kubernetes-worker
+  become: yes
+  become_user: centos
+  tasks:
+
+    - name: Build docker image for medhavi-app on kubernetes-worker node
+      shell: docker build -f Dockerfile -t medhavi-app:v1 .
+
+- hosts: kubernetes-master
+  become: yes
+  become_user: centos
+  tasks:
+  
+    - name: Create containers for medhavi-app
+      shell: kubectl apply -f app.yaml

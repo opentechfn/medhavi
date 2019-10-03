@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: medhavi-app-service
+spec:
+  selector:
+    app: medhavi-app
+  ports:
+  - protocol: "TCP"
+    port: 8001
+    targetPort: 8000
+  type: LoadBalancer
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: medhavi-app
+  labels:
+    app: medhavi-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: medhavi-app
+  template:
+    metadata:
+      labels:
+        app: medhavi-app
+    spec:
+      containers:
+      - name: medhavi-app
+        image: medhavi-app:v1
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8000
