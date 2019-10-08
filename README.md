@@ -52,3 +52,4 @@ DB.ValidUsers
 DB.ValidClusters
 DB.ValidAccounts
 
+https://go.gliffy.com/go/share/image/sys6fe15wgf6jre8ibm3.png?utm_medium=live-embed&utm_source=custom
