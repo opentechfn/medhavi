@@ -87,3 +87,48 @@ class Node(db.Model, mb.ModelBase):
     def to_dict(self):
         d = super(Node, self).to_dict()
         return d
+
+
+class Cpu(db.Model, mb.ModelBase):
+    __tablename__ = 'cpu'
+    uuid = db.Column(db.String(36), primary_key=True)
+    node_resource_id = db.Column(db.String(36), db.ForeignKey(
+        'node_resources.uuid'))
+    model_name = db.Column(db.String(50))
+    architecture = db.Column(db.String(30))
+    numa_node_0 = db.Column(db.String(30))
+    numa_node_1 = db.Column(db.String(30))
+
+    def __init__(self, uuid=None, node_resource_id=None, model_name=None,
+                 architecture=None, numa_node_0=None, numa_node_1=None):
+        self.uuid = uuid
+        self.node_resource_id = node_resource_id
+        self.model_name = model_name
+        self.architecture = architecture
+        self.numa_node_0 = numa_node_0
+        self.numa_node_1 = numa_node_1
+
+    def to_dict(self):
+        d = super(Cpu, self).to_dict()
+        return d
+
+
+class NodeResources(db.Model, mb.ModelBase):
+    __tablename__ = 'node_resources'
+    uuid = db.Column(db.String(36), primary_key=True)
+    node_id = db.Column(db.String(36), db.ForeignKey('node.uuid'))
+    cpu = db.relationship(
+        'Cpu',
+        backref='node_resources',
+        cascade='all, delete, delete-orphan',
+        lazy='subquery'
+    )
+
+    def __init__(self, uuid=None, node_id=None):
+        self.uuid = uuid
+        self.node_id = node_id
+
+    def to_dict(self):
+        d = super(NodeResources, self).to_dict()
+        d['cpu'] = [r.to_dict() for r in self.cpu]
+        return d
