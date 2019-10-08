@@ -33,8 +33,10 @@ Medhavi Design:
 
 We will start with Medhavi Compute Workload Manager to enable the Medhavi API through A primary and secondary controllers. The API certainly will start with Baseline API support to run job in a container, VM or a Baremetal object. At this time we will not dwell into task level, and assume Job level scheduling should suffice.
 
-The other assumption we make is that since all workloads these day assume a cluster we will assume our standard cluster to be made of 4 nodes(1-4) with agents and node(0) as agent manager. Node may be Containers, VMs or Physical servres and for PoC they will be host endpoints. We alos assume for now that we have a DB Manager with Primary Controller managing DB schemas for persistance, and some message to publish & subscribe resources and nodes for cluster to carry put job operations.
+The other assumption we make is that since all workloads these day assume a cluster we will assume our standard cluster to be made of 4 nodes(1-4) with agents and node(0) as agent manager. Node may be Containers, VMs or Physical servres and for PoC they will be host endpoints. We also assume for now that we have a DB Manager with Primary Controller managing DB schemas for persistance, and some message to publish & subscribe resources and nodes for cluster to carry put job operations.
 
+Resources managed by Node Agent Manager and sometimes also termed as Device Manager as it deals with low level resources like CPU, GPU, FPGA and they may directly work thorugh agents or via different modules external to Medhavi upstream.
+ 
 Following is the elements of Medhavi to manage the workload Intelligently.
 
 Baseline APIs(Medhavi): Note each job must get a minimum of 1 virtual core to execute and all jobs run in parallel
