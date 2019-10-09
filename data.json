@@ -1,7 +1,7 @@
 {  
    "Version": "1.0",
    "DataURL":"https://xyz.com/v1/data.json",
-   "variables":{  
+   "variables":{
       "namePrefix":"[resourceGroup().name]",
       "mlLib":"TensorFlow",
       "mlLibVersion":"v2.0",
@@ -9,20 +9,20 @@
       "storageAccountName":"DataBase",
       "storageAccountType":"Storage"
    },
-   "resource":[  
-      {  
+   "resource":[
+      {
          "InfrastrctureType":"[OpenStack/VMware/Baremetal/Container]",
          "APIEndpoint":"100.Xx.x.x",
          "username":"admin",
          "password":"Password",
          "token":"token",
          "NodeList": [
-            {"NodeIP": "1.2.3.4",
-	     "Username": "test",
-             "Password": "test"}
+            {"NodeIP": "192.168.111.128",
+	         "Username": "root",
+             "Password": "openstack"}
          ]
       },
-      {  
+      {
          "InfrastrctureType":"[AWS/Azure/GCP]",
          "PublicEndpoint":"100.Xx.x.x",
          "username":"admin",
@@ -31,9 +31,9 @@
          "availabilityZone":"Asia",
          "Region": "Mumbai",
          "NodeList": [
-            {"NodeIP": "1.2.3.4.",
-	     "Username": "test",
-             "Password": "test"}
+            {"NodeIP": "192.168.111.140",
+	         "Username": "client",
+             "Password": "openstack"}
          ]
       }
    ]

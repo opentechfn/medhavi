@@ -19,3 +19,10 @@ class ResourceNotFound(NotFound):
     def __init__(self, uid):
         super(ResourceNotFound, self).__init__()
         self.message = "Couldn't found a resource with uuid={}.".format(uid)
+
+
+class NodeResourceNotFound(NotFound):
+    def __init__(self, uid):
+        super(NodeResourceNotFound, self).__init__()
+        self.message = "Couldn't found node resources with uuid={}.".format(
+            uid)
