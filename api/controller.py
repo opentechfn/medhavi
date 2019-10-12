@@ -4,9 +4,9 @@ from flask import jsonify
 from flask import make_response
 from flask import request
 from oslo_utils import uuidutils
+import urllib2
 from webob import exc
 
-import config
 from common import exceptions
 from db import api
 from device_engine import cpu
@@ -28,7 +28,10 @@ class Controller():
         json_obj.parse_json_data()
 
         ml_uuid = uuidutils.generate_uuid()
-        url = content['DataURL']
+        url = content.get('DataURL')
+        if url:
+            content = json.loads(urllib2.urlopen(url).read())
+
         ml_lib = content['variables']['mlLib']
         is_form_cluster = content['variables']['isFormCluster']
         storage_name = content['variables']['storageAccountName']
